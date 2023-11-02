@@ -49,4 +49,4 @@ Your performance metrics, encapsulated as reaction times, will be downloaded in 
 
 ## Author
 
-- **me and my gang** - Initial work and ongoing maintenance.
+- **me**
