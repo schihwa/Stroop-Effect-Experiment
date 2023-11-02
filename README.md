@@ -33,8 +33,8 @@ To engage with the Stroop Test:
 3. Respond to the color of the words as they are presented:
    - Press 'A' for Red
    - Press 'S' for Green
-   - Press 'D' for Blue
-   - Press 'F' for Yellow
+   - Press 'J' for Blue
+   - Press 'K' for Yellow
 4. The application tracks your reaction times and compiles the data into a downloadable CSV file upon completion.
 
 ## Results
