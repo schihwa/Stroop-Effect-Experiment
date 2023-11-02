@@ -97,7 +97,7 @@ async function beginTest(numberOfTrials, numberOfWords) {
 // Initialize the test setup.
 function initTest() {
     // Add a click event listener to the 'Start' button to begin the test.
-    document.querySelector('#startButton').addEventListener('click', () => beginTest(5, 2));
+    document.querySelector('#startButton').addEventListener('click', () => beginTest(10, 10));
 }
 
 // Execute the initialization function when the script loads.
