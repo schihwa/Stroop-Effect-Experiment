@@ -1,5 +1,5 @@
 // Define a mapping of keyboard keys to colors corresponding to the Stroop test.
-const keyColorMapping = { 'a': 'red', 's': 'green', 'd': 'blue', 'f': 'yellow' };
+const keyColorMapping = { 'a': 'red', 's': 'green', 'j': 'blue', 'k': 'yellow' };
 
 // Variables to store the state of the test.
 let lastPair = null; // Stores the last displayed word-color pair to avoid immediate repetition.
