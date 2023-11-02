@@ -51,6 +51,7 @@ function waitForKeypress(requiredColor) {
 // @param {HTMLElement} displayElement - The element where the countdown is displayed.
 async function countdownTimer(duration, displayElement) {
     for (let timeLeft = duration; timeLeft > 0; timeLeft--) {
+        document.getElementById("divLeft").style.color = "black"
         displayElement.textContent = `Next trial starts in ${timeLeft}...`; // Update the display with the countdown.
         await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second.
     }
