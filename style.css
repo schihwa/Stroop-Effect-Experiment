@@ -1,0 +1,112 @@
+/* CSS Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Ensures padding doesn't affect the overall dimensions */
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    display: flex;
+    font-family: 'Arial', sans-serif;
+    overflow: hidden; /* Prevents scroll */
+}
+
+/* Container */
+.container {
+    display: flex;
+    flex: 1;
+}
+
+/* Left div */
+#divLeft {
+    flex: 1; /* Takes up 50% of the flex container */
+    background-color: #C8E6C9; /* Light Green */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+/* Right container holding the two divs */
+.divRightContainer {
+    flex: 1; /* Takes up the remaining 50% of the flex container */
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full height */
+}
+
+/* Right top div */
+#divRightTop {
+    flex: 1; /* Takes up 50% of the parent container */
+    background-color: #81C784; /* Medium Green */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+/* Right bottom div */
+#divRightBottom {
+    flex: 1; /* Takes up the remaining 50% of the parent container */
+    background-color: #4CAF50; /* Dark Green */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+/* Button Styling */
+button {
+    padding: 15px 30px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #67d96a; /* Dark Green */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Text and headings styling */
+h1, p {
+    color: #333;
+    text-align: center;
+    line-height: 1.6;
+}
+
+/* List styling */
+ul {
+    list-style: none; /* Removes bullet points */
+    padding: 0; /* Removes default padding */
+    display: flex; /* Enables flexbox layout */
+    flex-direction: column; /* Aligns items in a column */
+    align-items: center; /* Centers items horizontally */
+    justify-content: center; /* Centers items vertically if the ul has a specific height */
+}
+
+ul li {
+    margin: 5px 0; /* Keeps vertical space between list items */
+    text-align: center; /* Ensures text within each li is centered if wider than container */
+}
+
+
+/* Disabled Button Styling */
+button:disabled {
+    background-color: #C8E6C9; /* Light Green */
+    color: #b4b4b4;
+    cursor: not-allowed; /* Changes cursor to indicate the button is not clickable */
+    /* You can also explicitly remove the transform and box-shadow properties */
+    transform: none;
+    box-shadow: none;
+}

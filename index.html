@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Three Divs Layout</title>
+</head>
+<body>
+
+    <div class="container">
+        <div id="divLeft">
+            COLOUR
+        </div>
+        <div class="divRightContainer">
+            <div id="divRightTop">
+                <h1>The Stroop Effect Experiment</h1>
+                <p>Welcome to this interactive Stroop test</p>
+                <ul>
+                    <li>10 words will be shown in each test.</li>
+                    <li>There will be a total of 10 tests.</li>
+                    <li>There will be no timer between words.</li>
+                    <li>Each word will be displayed in a color.</li>
+                    <li>Your task is to press the key that corresponds to the color of the word, not what the word says.</li>
+                    <li>Use the following keys: A (Red), S (Green), D (Blue), F (Yellow).</li>
+                    <li>There will be a short timer between each test to prepare you for the next round.</li>
+                </ul>
+                <p>Try to respond as quickly and accurately as possible. Once the test is completed, you can download your reaction time data.</p>
+                <button id="startButton">START</button>
+            </div>
+            <div id="divRightBottom">
+                <button id="downloadData" autocomplete="off" disabled onclick="downloadData()">Download Data</button>
+            </div>
+        </div>
+    </div>
+    
+
+</body>
+<script src="script.js"></script>
+</html>
