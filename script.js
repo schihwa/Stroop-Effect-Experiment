@@ -1,139 +1,104 @@
-// Define a mapping of keyboard keys to color names for the Stroop test.
+// Define a mapping of keyboard keys to colors corresponding to the Stroop test.
 const keyColorMapping = { 'a': 'red', 's': 'green', 'd': 'blue', 'f': 'yellow' };
 
 // Variables to store the state of the test.
-let lastPair = null; // Variable to remember the last word-color pair to avoid repetitions.
-let results = []; // Array to hold all the results of the trials.
-let averages = null; // Variable to store the average reaction times after calculation.
+let lastPair = null; // Stores the last displayed word-color pair to avoid immediate repetition.
+let results = []; // Array to hold the reaction time results of each trial.
 
-// Function to display the word with the given color on the page.
+// Function to display the word with the specified color on the page.
+// @param {string} word - The word to be displayed.
+// @param {string} color - The color in which the word should be displayed.
 function display(word, color) {
     const displayElement = document.getElementById("divLeft");
-    displayElement.innerHTML = word;
-    displayElement.style.color = color;
+    displayElement.innerHTML = word; // Sets the inner HTML of the div to the word.
+    displayElement.style.color = color; // Sets the text color of the div to the specified color.
 }
 
-// Function to generate a non-repeating word-color pair.
+// Function to generate a random word-color pair that doesn't repeat the last one.
+// @returns {Object} An object with 'word' and 'color' properties.
 function wordColourCreator() {
     const colors = ['red', 'green', 'blue', 'yellow'];
     let word, color;
 
     do {
-        // Randomly select a word and a color.
+        // Select a random word and color from the colors array.
         word = colors[Math.floor(Math.random() * colors.length)];
         color = colors[Math.floor(Math.random() * colors.length)];
     } while (lastPair && word === lastPair.word && color === lastPair.color);
+    // Prevent immediate repetition of the same word-color pair.
 
-    // Update the last pair and return the new one.
-    lastPair = { word, color };
-    return lastPair;
+    lastPair = { word, color }; // Update the lastPair with the new values.
+    return lastPair; // Return the new non-repeating word-color pair.
 }
 
-// Function to handle the keypress event and resolve when the correct key is pressed.
+// Function to listen for a keypress and return a promise that resolves when the correct key is pressed.
+// @param {string} requiredColor - The color that the pressed key must correspond to.
+// @returns {Promise<number>} A promise that resolves with the timestamp of the correct key press.
 function waitForKeypress(requiredColor) {
     return new Promise(resolve => {
         const keyHandler = event => {
-            // Check if the pressed key is the one mapped to the required color.
             if (keyColorMapping[event.key.toLowerCase()] === requiredColor) {
-                document.removeEventListener('keydown', keyHandler);
-                resolve(Date.now());
+                document.removeEventListener('keydown', keyHandler); // Remove the event listener.
+                resolve(Date.now()); // Resolve the promise with the current timestamp.
             }
         };
-        document.addEventListener('keydown', keyHandler);
+        document.addEventListener('keydown', keyHandler); // Attach the event listener to the document.
     });
 }
 
-// Function to manage the countdown before each trial.
+// Function to start a countdown before each trial begins.
+// @param {number} duration - The countdown duration in seconds.
+// @param {HTMLElement} displayElement - The element where the countdown is displayed.
 async function countdownTimer(duration, displayElement) {
     for (let timeLeft = duration; timeLeft > 0; timeLeft--) {
-        displayElement.textContent = `Next trial starts in ${timeLeft}...`;
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        displayElement.textContent = `Next trial starts in ${timeLeft}...`; // Update the display with the countdown.
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second.
     }
-    displayElement.textContent = ''; // Clear the display after countdown.
+    displayElement.textContent = ''; // Clear the display after the countdown ends.
 }
 
+// Function to initiate the Stroop test.
+// @param {number} numberOfTrials - The total number of trials in the test.
+// @param {number} numberOfWords - The number of words to display per trial.
 async function beginTest(numberOfTrials, numberOfWords) {
+    // Fetch the start and download buttons.
     const startButton = document.querySelector('#startButton');
     const downloadButton = document.querySelector('#downloadData');
 
-    const countdownDisplay = document.getElementById('divLeft');
-
-    // Disable the start button to avoid multiple test initiations.
+    // Disable the start and download buttons to prevent re-initiation during the test.
     startButton.disabled = true;
     downloadButton.disabled = true;
 
+    lastPair = null;
+    results = []; 
 
-
-    // Create an array to store the results.
-    results = [];
-
-    // Iterate over the set number of trials, starting from 1.
     for (let trial = 1; trial <= numberOfTrials; trial++) {
-        // Start a countdown before each trial.
-        await countdownTimer(5, countdownDisplay);
+        await countdownTimer(5, document.getElementById('divLeft')); // Start a 5-second countdown.
 
-        // Iterate over the set number of words per trial.
         for (let wordIndex = 0; wordIndex < numberOfWords; wordIndex++) {
-            const { word, color } = wordColourCreator();
-            display(word, color);
+            const { word, color } = wordColourCreator(); // Generate a non-repeating word-color pair.
+            display(word, color); // Display the word in the selected color.
 
-            // Capture the start time and wait for the correct keypress.
-            const startTime = Date.now();
-            const endTime = await waitForKeypress(color);
-            const reactionTime = endTime - startTime;
-            const congruency = word === color ? 'Congruent' : 'Incongruent';
+            const startTime = Date.now(); // Record the start time.
+            const endTime = await waitForKeypress(color); // Wait for the correct keypress.
+            const reactionTime = endTime - startTime; // Calculate the reaction time.
+            const congruency = word === color ? 'Congruent' : 'Incongruent'; // Determine congruency.
 
-            // Store each reaction time along with its congruency status and trial number.
+            // Store the reaction time along with the trial number and congruency status.
             results.push({ trial, congruency, reactionTime });
         }
     }
 
-    countdownDisplay.textContent = "Done";
-    // After the test, re-enable the start button.
+    // Re-enable the start and download buttons after the test completes.
     startButton.disabled = false;
     downloadButton.disabled = false;
-
 }
 
-function downloadData() {
-    // Create a CSV string and add the headers.
-    let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += "Trial Number,Type,Reaction Time (ms)\r\n"; // Column headers
-
-    // Append data from the results
-    results.forEach(results => {
-        csvContent += `${results.trial},${results.congruency},${results.reactionTime}\r\n`;
-    });
-
-    // Encode the CSV content so it can be used as a URL.
-    const encodedUri = encodeURI(csvContent);
-
-    // Create a temporary anchor (link) element.
-    const link = document.createElement("a");
-
-    // Set the download attribute of the link to the filename.
-    link.setAttribute("download", "stroop-test-results.csv");
-
-    // Set the href of the link to the encoded URI.
-    link.href = encodedUri;
-
-    // Append the link to the body.
-    document.body.appendChild(link);
-
-    // Simulate a click on the link to start the download.
-    link.click();
-
-    // Remove the link after starting the download.
-    document.body.removeChild(link);
-}
-
-
-
-// Initialization code to set up event listeners and start the test.
+// Initialize the test setup.
 function initTest() {
-    // Event listener to start the test when the 'Start' button is clicked.
+    // Add a click event listener to the 'Start' button to begin the test.
     document.querySelector('#startButton').addEventListener('click', () => beginTest(5, 2));
 }
 
-// Call the initialization function when the script loads.
+// Execute the initialization function when the script loads.
 initTest();
