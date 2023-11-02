@@ -90,9 +90,45 @@ async function beginTest(numberOfTrials, numberOfWords) {
         }
     }
 
+    const displayElement = document.getElementById("divLeft");
+    displayElement.textContent = "Experiment finished";
+    displayElement.style.color = "black";
+
     // Re-enable the start and download buttons after the test completes.
     startButton.disabled = false;
     downloadButton.disabled = false;
+}
+
+function downloadData() {
+    // Create a CSV string and add the headers.
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Trial Number,Type,Reaction Time (ms)\r\n"; // Column headers
+
+    // Append data from the results
+    results.forEach(results => {
+        csvContent += `${results.trial},${results.congruency},${results.reactionTime}\r\n`;
+    });
+
+    // Encode the CSV content so it can be used as a URL.
+    const encodedUri = encodeURI(csvContent);
+
+    // Create a temporary anchor (link) element.
+    const link = document.createElement("a");
+
+    // Set the download attribute of the link to the filename.
+    link.setAttribute("download", "stroop-test-results.csv");
+
+    // Set the href of the link to the encoded URI.
+    link.href = encodedUri;
+
+    // Append the link to the body.
+    document.body.appendChild(link);
+
+    // Simulate a click on the link to start the download.
+    link.click();
+
+    // Remove the link after starting the download.
+    document.body.removeChild(link);
 }
 
 // Initialize the test setup.
